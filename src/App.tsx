@@ -5,26 +5,31 @@ import { Table } from './component/Table';
 import { CounterValue } from './component/CounterValue';
 
 export type CounterValueType = {
+    count: number;
     maxValue: number;
     minValue: number;
 };
 
 function App() {
-    let [count, setCount] = useState(0);
+    // let [count, setCount] = useState(0);
     let [counterValue, setCounterValue] = useState({
+        count: 0,
         maxValue: 0,
         minValue: 0,
     });
 
     const countInc = () => {
         debugger;
-        setCount((count += 1));
-        if (count > counterValue.maxValue) {
-            setCount(counterValue.maxValue);
+        setCounterValue({ ...counterValue, count: counterValue.count + 1 });
+        if (counterValue.count > counterValue.maxValue) {
+            setCounterValue({
+                ...counterValue,
+                maxValue: counterValue.maxValue,
+            });
         }
     };
     const resetCount = () => {
-        setCount(counterValue.minValue);
+        setCounterValue({ ...counterValue, count: counterValue.minValue });
     };
 
     const changeCounterValue = (value: number, id: string) => {
@@ -34,7 +39,7 @@ function App() {
     };
 
     const setCounterValueButton = () => {
-        setCount((count = counterValue.minValue));
+        setCounterValue({ ...counterValue, count: counterValue.minValue });
     };
 
     return (
@@ -47,23 +52,23 @@ function App() {
             <div className={'counterWrapper'}>
                 <div
                     className={
-                        count === counterValue.maxValue
+                        counterValue.count === counterValue.maxValue
                             ? 'tableWrapperContent'
                             : 'tableWrapper'
                     }
                 >
-                    <Table count={count} />
+                    <Table count={counterValue.count} />
                 </div>
                 <div className={'buttonWrapper'}>
                     <Button
                         callback={countInc}
                         name={'inc'}
-                        disable={count === counterValue.maxValue}
+                        disable={counterValue.count === counterValue.maxValue}
                     />
                     <Button
                         callback={resetCount}
                         name={'reset'}
-                        disable={count === -counterValue.minValue}
+                        disable={counterValue.count === -counterValue.minValue}
                     />
                 </div>
             </div>
